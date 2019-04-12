@@ -1,0 +1,17 @@
+{
+  "name": "sergey-netlify",
+  "version": "1.0.0",
+  "description": "A Sergey example project, ready for Netlify",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "sergey",
+    "dev": "sergey --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sergey": "0.0.2"
+  }
+}

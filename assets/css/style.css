@@ -1,0 +1,96 @@
+/* Reset */
+
+body {
+  margin: 0;
+}
+
+blockquote,
+pre,
+ol,
+ul,
+figure {
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  height: auto;
+  border: none;
+}
+
+article,
+aside,
+figure,
+footer,
+header,
+aside,
+main,
+nav {
+  display: block;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+/* Typography */
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  color: #222;
+  background-color: #fafafa;
+  font: 400 14px/1.625 -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
+  font-size: calc(14px + (20 - 14) * (100vw - 320px) / (750 - 320));
+}
+
+@media (min-width: 750px) {
+  body {
+    font-size: 20px;
+  }
+}
+
+a {
+  color: #2ab591;
+}
+
+code {
+  font-size: 0.9em;
+}
+
+/* Grid */
+
+.wrapper {
+  max-width: 800px;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+/* Header */
+
+[role='banner'] {
+  background: #fff;
+}
+
+[role='banner'] a + a {
+  margin-left: 0.5em;
+}
+
+/* Footer */
+
+[role='contentinfo'] .wrapper {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+[role='contentinfo'] .deploy {
+  max-width: 40%;
+}
