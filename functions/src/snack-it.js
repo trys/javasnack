@@ -9,7 +9,59 @@ const github = Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
-function generateTemplate({ title, taste, presentation, vfm, tasteBody, presentationBody, vfmBody }) {
+exports.handler = async event => {
+  const { headers, httpMethod: method, body } = event;
+
+  if (method !== 'POST') {
+    return {
+      statusCode: 501,
+      body: 'Nothing to see here...',
+    };
+  }
+
+  try {
+    // The message comes in from Slack as a urlencoded string, so parse it
+    const parameters = new URLSearchParams(body);
+
+    const data = JSON.parse(parameters.get('payload'));
+
+    if (data.message.type !== 'message') {
+      throw new Error('Payload must be a message');
+    }
+
+    if (data.channel.name !== 'javasnack') {
+      throw new Error('We can only process entries from #javasnack');
+    }
+
+    // Parse the review text, remove all `*` characters
+    const review = parseReview(data.message.text.replace(new RegExp('[*]', 'g'), ''));
+
+    // Generate the post template with the review object
+    const post = generateTemplate(review);
+
+    // Publish it to GitHub
+    await createPost(review.title, post);
+
+    return {
+      statusCode: 200,
+      body: 'Snacked!',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      statusCode: 400,
+      body: e.toString(),
+    };
+  }
+};
+
+/**
+ * String replaces placeholders with the correct data
+ * @param {Object} review - the review object
+ * @returns {String} - the review HTML
+ */
+function generateTemplate(review) {
+  const { title, taste, presentation, vfm, tasteBody, presentationBody, vfmBody } = review;
   const template = postTemplate;
 
   return template
@@ -22,13 +74,18 @@ function generateTemplate({ title, taste, presentation, vfm, tasteBody, presenta
     .replace('##VFMBODY##', vfmBody);
 }
 
+/**
+ * Performs a somewhat hacky parse of the review text from Slack
+ * and converts it into a data object with what we need for a post.
+ * @param {String} review - the review text from Slack
+ * @returns {Object} - the review object
+ */
 function parseReview(review) {
   // dodgily get title
   const title = review.split('\n')[0];
 
-  const scores = {};
-
   // dodgily pull scores out
+  const scores = {};
   for (const score of [
     { key: 'taste', searchString: 'taste: ' },
     { key: 'presentation', searchString: 'presentation: ' },
@@ -44,13 +101,22 @@ function parseReview(review) {
   }
 
   // Get paragraphs
-  const tasteBody = review.split('\n')[review.split('\n').findIndex(p => p === 'Taste') + 1];
-  const presentationBody = review.split('\n')[review.split('\n').findIndex(p => p === 'Presentation') + 1];
-  const vfmBody = review.split('\n')[review.split('\n').findIndex(p => p === 'Value for Money') + 1];
+  const paragraphs = review.split('\n');
+  // Find the heading, +1 the index to get the following paragraph
+  const tasteBody = paragraphs[paragraphs.findIndex(p => p === 'Taste') + 1];
+  const presentationBody = paragraphs[paragraphs.findIndex(p => p === 'Presentation') + 1];
+  const vfmBody = paragraphs[paragraphs.findIndex(p => p === 'Value for Money') + 1];
 
   return { title, ...scores, tasteBody, presentationBody, vfmBody };
 }
 
+/**
+ * Does a bunch of GitHub API calls to get our generated
+ * Sergey template into the GitHub repo.
+ * @param {String} title - the title of the post
+ * @param {String} post - the post HTML generated from generateTemplate()
+ * @returns {Promise<UpdateRef>}
+ */
 async function createPost(title, post) {
   const branch = await github.gitdata.getRef({
     owner,
@@ -91,45 +157,3 @@ async function createPost(title, post) {
     force: true,
   });
 }
-
-exports.handler = async event => {
-  const { headers, httpMethod: method, body } = event;
-
-  if (method !== 'POST') {
-    return {
-      statusCode: 501,
-      body: 'Nothing to see here...',
-    };
-  }
-
-  try {
-    const parameters = new URLSearchParams(body);
-
-    const data = JSON.parse(parameters.get('payload'));
-
-    if (data.message.type !== 'message') {
-      throw new Error('Payload must be a message');
-    }
-
-    if (data.channel.name !== 'javasnack') {
-      throw new Error('We can only process entries from #javasnack');
-    }
-
-    const review = parseReview(data.message.text.replace(new RegExp('[*]', 'g'), ''));
-
-    const post = generateTemplate(review);
-
-    await createPost(review.title, post);
-
-    return {
-      statusCode: 200,
-      body: 'Snacked!',
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      statusCode: 400,
-      body: e.toString(),
-    };
-  }
-};
