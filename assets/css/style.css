@@ -39,6 +39,11 @@ nav {
 
 /* Typography */
 
+:root {
+  --brand: #ff4757;
+  --heading: 'Service Station Heading';
+}
+
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -57,7 +62,7 @@ body {
 }
 
 a {
-  color: #ff4757;
+  color: var(--brand);
 }
 
 code {
@@ -65,7 +70,7 @@ code {
 }
 
 h1 {
-  font-family: 'Service Station Heading';
+  font-family: var(--heading);
   line-height: 1.2;
   font-size: 2.5em;
   font-weight: 400;
@@ -96,7 +101,7 @@ p {
 
 [role='banner'] {
   background: #fff;
-  font-family: 'Service Station Heading';
+  font-family: var(--heading);
   font-size: 1.25em;
   line-height: 1;
 }
@@ -124,28 +129,29 @@ p {
 
 /* Review */
 
-dl {
-  padding: 1rem;
-  background: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+.review {
+  background: var(--brand);
+  color: #fff;
+  padding-top: 0.5rem;
 }
 
-dt,
-dd {
-  display: block;
+.review .wrapper {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
 }
 
-dt {
-  font-weight: 700;
-  float: left;
-  clear: left;
-  margin-right: 0.5rem;
+.review dd {
+  font-size: 2em;
+  font-family: var(--heading);
+  margin: 0 0 0 0.5rem;
+  display: inline-block;
+  line-height: 1;
 }
 
-dd:after {
-  content: '';
-  clear: both;
-  display: table;
+.review dt {
+  display: inline-block;
+  font-size: 0.75em;
 }
 
 /* Listing */

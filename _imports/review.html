@@ -36,16 +36,24 @@
     </sergey-template>
   </sergey-import>
 
-  <main class="wrapper">
-    <dl>
-      <dt>Taste:</dt>
-      <dd><sergey-slot name="taste" /></dd>
-      <dt>Presentation:</dt>
-      <dd><sergey-slot name="presentation" /></dd>
-      <dt>Value for Money:</dt>
-      <dd><sergey-slot name="value" /></dd>
+  <aside class="review">
+    <dl class="wrapper">
+      <div>
+        <dt>Taste:</dt>
+        <dd><sergey-slot name="taste" /></dd>
+      </div>
+      <div>
+        <dt>Presentation:</dt>
+        <dd><sergey-slot name="presentation" /></dd>
+      </div>
+      <div>
+        <dt>Value:</dt>
+        <dd><sergey-slot name="value" /></dd>
+      </div>
     </dl>
+  </aside>
 
+  <main class="wrapper">
     <sergey-slot name="content" />
   </main>
 
