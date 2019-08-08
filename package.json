@@ -6,12 +6,26 @@
   "main": "index.js",
   "scripts": {
     "start": "sergey",
-    "dev": "sergey --watch"
+    "dev": "sergey --watch --exclude functions",
+    "lambda:dev": "netlify-lambda serve ./functions/src",
+    "lambda:build": "netlify-lambda build ./functions/src"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@octokit/rest": "^16.28.7",
     "sergey": "0.0.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trys/javasnack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/trys/javasnack/issues"
+  },
+  "homepage": "https://github.com/trys/javasnack#readme",
+  "devDependencies": {
+    "netlify-lambda": "^1.5.1"
   }
 }
