@@ -57,11 +57,22 @@ body {
 }
 
 a {
-  color: #2ab591;
+  color: #ff4757;
 }
 
 code {
   font-size: 0.9em;
+}
+
+h1 {
+  font-family: 'Abril Fatface';
+  line-height: 1.2;
+  font-size: 1.8em;
+  font-weight: 400;
+}
+
+h2 {
+  margin: 0 0 0.5rem;
 }
 
 /* Grid */
@@ -76,6 +87,12 @@ code {
 
 [role='banner'] {
   background: #fff;
+  font-family: 'Abril Fatface';
+}
+
+[role='banner'] a {
+  text-decoration: none;
+  color: inherit;
 }
 
 [role='banner'] a + a {
@@ -93,4 +110,76 @@ code {
 
 [role='contentinfo'] .deploy {
   max-width: 40%;
+}
+
+/* Review */
+
+dl {
+  padding: 1rem;
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  transform: skew(-10deg);
+}
+
+dt,
+dd {
+  display: block;
+  transform: skew(10deg);
+}
+
+dt {
+  font-weight: 700;
+  float: left;
+  clear: left;
+  margin-right: 0.5rem;
+}
+
+dd:after {
+  content: '';
+  clear: both;
+  display: table;
+}
+
+/* Listing */
+
+.reviews {
+  list-style: none;
+  display: grid;
+  grid-gap: 1.5rem;
+}
+
+.reviews > * {
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.reviews a {
+  text-decoration: none;
+  display: block;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.reviews {
+  pointer-events: none;
+}
+
+.reviews > * {
+  pointer-events: auto;
+  transition: 300ms opacity, 300ms transform;
+}
+
+.reviews:hover > * {
+  opacity: 0.4;
+}
+
+.reviews:hover > *:hover {
+  transform: scale(1.025);
+  opacity: 1;
+}
+
+@media (min-width: 40em) {
+  .reviews {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

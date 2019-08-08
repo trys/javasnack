@@ -1,7 +1,7 @@
 {
-  "name": "sergey-netlify",
+  "name": "javasnack",
   "version": "1.0.0",
-  "description": "A Sergey example project, ready for Netlify",
+  "description": "Tasty, tasty snacks",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sergey": "0.0.7"
+    "sergey": "0.0.8"
   }
 }
