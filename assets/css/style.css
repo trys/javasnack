@@ -96,12 +96,13 @@ p {
 
 [role='banner'] {
   background: #fff;
-  font-family: 'Abril Fatface';
+  font-family: 'Service Station Heading';
+  font-size: 1.25em;
+  line-height: 1;
 }
 
 [role='banner'] a {
   text-decoration: none;
-  color: inherit;
 }
 
 [role='banner'] a + a {
