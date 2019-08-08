@@ -65,14 +65,23 @@ code {
 }
 
 h1 {
-  font-family: 'Abril Fatface';
+  font-family: 'Service Station Heading';
   line-height: 1.2;
-  font-size: 1.8em;
+  font-size: 2.5em;
   font-weight: 400;
 }
 
 h2 {
   margin: 0 0 0.5rem;
+}
+
+p {
+  margin: 0 0 1.5rem;
+}
+
+@font-face {
+  font-family: 'Service Station Heading';
+  src: url('/assets/fonts/ServiceStation-Rough.woff') format('woff');
 }
 
 /* Grid */
@@ -117,14 +126,12 @@ h2 {
 dl {
   padding: 1rem;
   background: #fff;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  transform: skew(-10deg);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 dt,
 dd {
   display: block;
-  transform: skew(10deg);
 }
 
 dt {
@@ -182,4 +189,38 @@ dd:after {
   .reviews {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* Hero */
+
+.hero {
+  min-height: 30vw;
+  background: url('/assets/img/bg.jpg') center no-repeat;
+  background-size: cover;
+  position: relative;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+}
+
+.hero:after {
+  content: '';
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+.hero h1 {
+  font-size: 3em;
 }

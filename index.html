@@ -1,13 +1,28 @@
-<sergey-import src="template">
-  <h1>Javasnack - terribly serious reviews</h1>
-  <ul class="reviews">
-    <li>
-      <a href="/sainos-club-sandwich-review/">Sainos Club Sandwich Review</a>
-    </li>
-    <li>
-      <a href="/greggs-mexican-chicken-baguette/"
-        >Gregg’s Mexican Chicken Baguette</a
-      >
-    </li>
-  </ul>
-</sergey-import>
+<!DOCTYPE html>
+<html lang="en">
+<sergey-import src="head" />
+
+<body>
+  <sergey-import src="header" />
+
+  <sergey-import src="hero">
+    <sergey-template name="title">
+      Terribly serious<br>Food reviews
+    </sergey-template>
+  </sergey-import>
+
+  <main class="wrapper">
+    <ul class="reviews">
+      <li>
+        <a href="/sainos-club-sandwich-review/">Sainos Club Sandwich Review</a>
+      </li>
+      <li>
+        <a href="/greggs-mexican-chicken-baguette/">Gregg’s Mexican Chicken Baguette</a>
+      </li>
+    </ul>
+  </main>
+
+  <sergey-import src="footer" />
+</body>
+
+</html>
