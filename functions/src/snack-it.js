@@ -1,6 +1,6 @@
 const { URLSearchParams } = require('url');
 const Octokit = require('@octokit/rest');
-const { postTemplate } = require('./snack-it-template');
+const { postTemplate, listTemplate } = require('./snack-it-template');
 
 const owner = 'trys';
 const repo = 'javasnack';
@@ -10,7 +10,7 @@ const github = Octokit({
 });
 
 exports.handler = async event => {
-  const { headers, httpMethod: method, body } = event;
+  const { headers, httpMethod: method, body, queryStringParameters: query } = event;
 
   if (method !== 'POST') {
     return {
@@ -20,6 +20,10 @@ exports.handler = async event => {
   }
 
   try {
+    if (query.secret !== process.env.SECRET) {
+      throw new Error('Unauthorized');
+    }
+
     // The message comes in from Slack as a urlencoded string, so parse it
     const parameters = new URLSearchParams(body);
 
@@ -29,15 +33,18 @@ exports.handler = async event => {
       throw new Error('Payload must be a message');
     }
 
-    if (data.channel.name !== 'javasnack') {
-      throw new Error('We can only process entries from #javasnack');
-    }
+    // if (data.channel.name !== 'javasnack') {
+    //   throw new Error('We can only process entries from #javasnack');
+    // }
 
     // Parse the review text, remove all `*` characters
     const review = parseReview(data.message.text.replace(new RegExp('[*]', 'g'), ''));
 
     // Generate the post template with the review object
     const post = generateTemplate(review);
+
+    // Generate the list item for homepage
+    const listItem = generateListItem(review.title);
 
     // Publish it to GitHub
     await createPost(review.title, post);
@@ -75,6 +82,16 @@ function generateTemplate(review) {
 }
 
 /**
+ * Generates a <li> item for the homepage
+ * @param {String} title - the post title
+ */
+function generateListItem(title) {
+  const template = listTemplate;
+
+  return template.replace('##SLUG##', slug(title)).replace('##TITLE##', title);
+}
+
+/**
  * Performs a somewhat hacky parse of the review text from Slack
  * and converts it into a data object with what we need for a post.
  * @param {String} review - the review text from Slack
@@ -82,7 +99,7 @@ function generateTemplate(review) {
  */
 function parseReview(review) {
   // dodgily get title
-  const title = review.split('\n')[0];
+  const title = review.split('\n')[0].replace(new RegExp('[:]', 'g'), '');
 
   // dodgily pull scores out
   const scores = {};
@@ -124,18 +141,29 @@ async function createPost(title, post) {
     ref: 'heads/master',
   });
 
+  const file = await github.repos.getContents({
+    owner,
+    repo,
+    path: '_imports/reviews.html',
+  });
+
+  const indexFile = generateListItem(title) + '\n' + Buffer.from(file.data.content, 'base64').toString();
+
   const tree = await github.git.createTree({
     owner,
     repo,
     tree: [
       {
-        path: `${title
-          .toLowerCase()
-          .split(' ')
-          .join('-')}/index.html`,
+        path: `${slug(title)}/index.html`,
         mode: '100644',
         type: 'blob',
         content: post,
+      },
+      {
+        path: '_imports/reviews.html',
+        mode: '100644',
+        type: 'blob',
+        content: indexFile,
       },
     ],
     base_tree: branch.data.object.sha,
@@ -156,4 +184,14 @@ async function createPost(title, post) {
     sha: commit.data.sha,
     force: true,
   });
+}
+
+function slug(s) {
+  return s
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
 }

@@ -27,3 +27,7 @@ export const postTemplate = `<sergey-import src="review">
     </p>
   </sergey-template>
 </sergey-import>`;
+
+export const listTemplate = `<li>
+  <a href="/##SLUG##/">##TITLE##</a>
+</li>`;
