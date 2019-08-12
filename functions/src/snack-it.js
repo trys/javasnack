@@ -38,7 +38,7 @@ exports.handler = async event => {
     // }
 
     // Parse the review text, remove all `*` characters
-    const review = parseReview(data.message.text.replace(new RegExp('[*]', 'g'), ''));
+    const review = parseReview(data.message.text.replace(new RegExp('[*]', 'g'), ''), data.user);
 
     // Generate the post template with the review object
     const post = generateTemplate(review);
@@ -68,7 +68,7 @@ exports.handler = async event => {
  * @returns {String} - the review HTML
  */
 function generateTemplate(review) {
-  const { title, taste, presentation, vfm, tasteBody, presentationBody, vfmBody } = review;
+  const { title, taste, presentation, vfm, tasteBody, presentationBody, vfmBody, username } = review;
   const template = postTemplate;
 
   return template
@@ -78,7 +78,8 @@ function generateTemplate(review) {
     .replace('##VFMSCORE##', vfm)
     .replace('##TASTEBODY##', tasteBody)
     .replace('##PRESENTBODY##', presentationBody)
-    .replace('##VFMBODY##', vfmBody);
+    .replace('##VFMBODY##', vfmBody)
+    .replace('##AUTHOR##', username);
 }
 
 /**
@@ -95,9 +96,10 @@ function generateListItem(title) {
  * Performs a somewhat hacky parse of the review text from Slack
  * and converts it into a data object with what we need for a post.
  * @param {String} review - the review text from Slack
+ * @param {Object} user - the slack user object
  * @returns {Object} - the review object
  */
-function parseReview(review) {
+function parseReview(review, user) {
   // dodgily get title
   const title = review.split('\n')[0].replace(new RegExp('[:]', 'g'), '');
 
@@ -123,8 +125,9 @@ function parseReview(review) {
   const tasteBody = paragraphs[paragraphs.findIndex(p => p === 'Taste') + 1];
   const presentationBody = paragraphs[paragraphs.findIndex(p => p === 'Presentation') + 1];
   const vfmBody = paragraphs[paragraphs.findIndex(p => p === 'Value for Money') + 1];
+  const username = user.name;
 
-  return { title, ...scores, tasteBody, presentationBody, vfmBody };
+  return { title, ...scores, tasteBody, presentationBody, vfmBody, username };
 }
 
 /**
