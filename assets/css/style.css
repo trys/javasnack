@@ -239,3 +239,11 @@ main.wrapper {
 .hero h1 {
   font-size: 3em;
 }
+
+.review-header {
+  border-bottom: 1px solid #DDD;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+  color: #666;
+}

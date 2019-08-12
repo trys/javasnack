@@ -6,6 +6,8 @@ export const postTemplate = `<sergey-import src="review">
   <sergey-template name="taste">##TASTESCORE##</sergey-template>
   <sergey-template name="presentation">##PRESENTSCORE##</sergey-template>
   <sergey-template name="value">##VFMSCORE##</sergey-template>
+  
+  <sergey-template name="author">##AUTHOR##</sergey-template>
 
   <sergey-template name="content">
     <h2>Taste</h2>
