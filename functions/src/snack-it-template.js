@@ -2,7 +2,7 @@ const postTemplate = `
 ---
 title: "##TITLE##"
 author: ##AUTHOR##
-date: 2019-08-07
+date: "##DATE##"
 taste: ##TASTESCORE##
 presentation: ##PRESENTSCORE##
 value: ##VFMSCORE##

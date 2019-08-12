@@ -1,7 +1,7 @@
 ---
 title: "Pret’s Coronation Chicken Flatbread - A right royal mess"
 author: rhysbowles
-date: 2019-08-12
+date: "2019-08-12T19:39:38.951Z"
 taste: 8
 presentation: 4
 value: 4

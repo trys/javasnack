@@ -70,6 +70,7 @@ exports.handler = async event => {
 function generateTemplate(review) {
   const { title, taste, presentation, vfm, tasteBody, presentationBody, vfmBody, username } = review;
   const template = postTemplate;
+  const date = new Date().toISOString();
 
   return template
     .replace('##TITLE##', title)
@@ -79,7 +80,8 @@ function generateTemplate(review) {
     .replace('##TASTEBODY##', tasteBody)
     .replace('##PRESENTBODY##', presentationBody)
     .replace('##VFMBODY##', vfmBody)
-    .replace('##AUTHOR##', username);
+    .replace('##AUTHOR##', username)
+    .replace('##DATE##', date)
 }
 
 /**

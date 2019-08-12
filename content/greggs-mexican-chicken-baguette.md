@@ -1,7 +1,7 @@
 ---
 title: "Gregg’s Mexican Chicken Baguette"
 author: Sam
-date: 2019-08-08
+date: "2019-08-08T12:39:38.951Z"
 taste: 9
 presentation: 5
 value: 10

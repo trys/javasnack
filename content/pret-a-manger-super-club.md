@@ -2,7 +2,7 @@
 title: "Pret a Manger 'Super Club'"
 author: timnovis
 image: '/assets/img/pret-super-club.jpg'
-date: 2019-08-12
+date: "2019-08-12T12:39:38.951Z"
 taste: 5
 presentation: 5
 value: 5

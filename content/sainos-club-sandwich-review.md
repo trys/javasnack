@@ -2,7 +2,7 @@
 title: "Sainos Club Sandwich"
 author: timnovis
 image: '/assets/img/turkey-club.jpg'
-date: 2019-08-07
+date: "2019-08-07T12:39:38.951Z"
 taste: 7
 presentation: 9
 value: 10

@@ -2,7 +2,7 @@
 title: 'Croque Shop Pork, Cheese & Marmite Sausage Roll'
 author: Trys
 image: '/assets/img/sausage-roll.jpg'
-date: 2019-08-09
+date: "2019-08-09T12:39:38.951Z"
 taste: 9
 presentation: 9
 value: 7
