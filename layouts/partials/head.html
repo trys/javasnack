@@ -1,0 +1,45 @@
+<head>
+  {{ $url := getenv (cond (eq "production" (getenv "CONTEXT")) "URL" "DEPLOY_PRIME_URL" ) | default (cond (eq "//localhost:1313/" (printf "%s" $.Site.BaseURL)) "//localhost:1313" $.Site.BaseURL) }}
+  <meta charset="UTF-8" />
+  <base href="{{ $url }}">
+  <link rel="stylesheet" href="/assets/css/style.css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+  {{ $post := resources.Get "css/main.scss" }}
+  {{- $title := printf "%s | %s" .Title .Site.Title -}}
+  {{- $og := printf "%s%s" $url (.Params.image | default "/assets/img/bg.jpg") -}}
+  {{- $description := .Description | default "Read the full review on JavaSnack" -}}
+  {{- $ogSize := cond (isset .Params "image") "summary_large_image" "summary" -}}
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png?v=1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png?v=1">
+  <link rel="manifest" href="/assets/icons/site.webmanifest?v=1">
+  <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg?v=1" color="#5bbad5">
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico?v=1">
+  <meta name="apple-mobile-web-app-title" content="JavaSnack">
+  <meta name="application-name" content="JavaSnack">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="msapplication-config" content="/assets/icons/browserconfig.xml?v=1">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="alternate" type="application/rss+xml" href="/index.xml" title="RSS Feed" />
+  
+  <title>{{ $title }}</title>
+  <meta name="description" content="{{ $description }}" />
+  <meta property="og:url" content="{{ .RelPermalink }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ $title }}" />
+  <meta property="og:description" content="{{ $description }}" />
+  <meta property="og:image" content="{{ $og }}" />
+  <meta property="og:image:alt" content="{{ $title }}" />
+  <meta name="twitter:card" content="{{ $ogSize }}" />
+  <meta name="twitter:title" content="{{ $title }}" />
+  <meta name="twitter:description" content="{{ $description }}" />
+  <meta name="twitter:image" content="{{ $og }}" />
+  {{- if .Params.taste -}}
+  <meta name="twitter:label1" value="Taste" />
+  <meta name="twitter:data1" value="{{ .Params.taste }}" />
+  <meta name="twitter:label2" value="Presentation" />
+  <meta name="twitter:data2" value="{{ .Params.presentation }}" />
+  {{- end -}}
+</head>
+

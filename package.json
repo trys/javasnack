@@ -5,8 +5,6 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "sergey",
-    "dev": "sergey --watch --exclude functions",
     "lambda:dev": "netlify-lambda serve ./functions/src",
     "lambda:build": "netlify-lambda build ./functions/src"
   },
@@ -15,8 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@octokit/rest": "^16.28.7",
-    "encoding": "^0.1.12",
-    "sergey": "0.0.8"
+    "encoding": "^0.1.12"
   },
   "repository": {
     "type": "git",

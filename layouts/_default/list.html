@@ -1,0 +1,9 @@
+{{ define "main" }}
+  <main class="wrapper reviews">
+    {{ range .Pages }}
+      <article>
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </article>
+    {{ end }}
+  </main>
+{{ end }}

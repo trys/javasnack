@@ -1,6 +1,6 @@
 const { URLSearchParams } = require('url');
 const Octokit = require('@octokit/rest');
-const { postTemplate, listTemplate } = require('./snack-it-template');
+const { postTemplate } = require('./snack-it-template');
 
 const owner = 'trys';
 const repo = 'javasnack';
@@ -83,16 +83,6 @@ function generateTemplate(review) {
 }
 
 /**
- * Generates a <li> item for the homepage
- * @param {String} title - the post title
- */
-function generateListItem(title) {
-  const template = listTemplate;
-
-  return template.replace('##SLUG##', slug(title)).replace('##TITLE##', title);
-}
-
-/**
  * Performs a somewhat hacky parse of the review text from Slack
  * and converts it into a data object with what we need for a post.
  * @param {String} review - the review text from Slack
@@ -144,29 +134,15 @@ async function createPost(title, post) {
     ref: 'heads/master',
   });
 
-  const file = await github.repos.getContents({
-    owner,
-    repo,
-    path: '_imports/reviews.html',
-  });
-
-  const indexFile = generateListItem(title) + '\n' + Buffer.from(file.data.content, 'base64').toString();
-
   const tree = await github.git.createTree({
     owner,
     repo,
     tree: [
       {
-        path: `${slug(title)}/index.html`,
+        path: `/content/${slug(title)}.md`,
         mode: '100644',
         type: 'blob',
         content: post,
-      },
-      {
-        path: '_imports/reviews.html',
-        mode: '100644',
-        type: 'blob',
-        content: indexFile,
       },
     ],
     base_tree: branch.data.object.sha,
