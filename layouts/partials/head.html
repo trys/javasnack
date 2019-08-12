@@ -4,7 +4,6 @@
   <base href="{{ $url }}">
   <link rel="stylesheet" href="/assets/css/style.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-  {{ $post := resources.Get "css/main.scss" }}
   {{- $title := printf "%s | %s" .Title .Site.Title -}}
   {{- $og := printf "%s%s" $url (.Params.image | default "/assets/img/bg.jpg") -}}
   {{- $description := .Description | default "Read the full review on JavaSnack" -}}
