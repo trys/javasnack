@@ -1,22 +1,12 @@
-const postTemplate = `
+export const postTemplate = `
 ---
 title: "##TITLE##"
 author: ##AUTHOR##
 date: "##DATE##"
-taste: ##TASTESCORE##
-presentation: ##PRESENTSCORE##
-value: ##VFMSCORE##
+taste: ##TASTE##
+presentation: ##PRESENT##
+value: ##VALUE##
 ---
 
-## Taste
-
-##TASTEBODY##
-
-## Presentation
-
-##PRESENTBODY##
-
-## Value for Money
-
-##VFMBODY##
-`
+##BODY##
+`;

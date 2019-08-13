@@ -9,6 +9,12 @@ const github = Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
+const REGEX_SANIT_TITLE = new RegExp('[:]', 'g');
+const REGEX_HEADINGS = new RegExp(/^([*])(.+)[*]$/, 'm');
+const REGEX_TASTE_SCORE = new RegExp(/^Taste:|^Flavour:|^Flavor:/, 'im');
+const REGEX_PRESENT_SCORE = new RegExp(/^Presentation:|^Appearance:|^Look:/, 'im');
+const REGEX_VALUE_SCORE = new RegExp(/^Value for money:|^Value:|^VFM:/, 'im');
+
 exports.handler = async event => {
   const { headers, httpMethod: method, body, queryStringParameters: query } = event;
 
@@ -20,9 +26,9 @@ exports.handler = async event => {
   }
 
   try {
-    if (query.secret !== process.env.SECRET) {
-      throw new Error('Unauthorized');
-    }
+    // if (query.secret !== process.env.SECRET) {
+    //   throw new Error('Unauthorized');
+    // }
 
     // The message comes in from Slack as a urlencoded string, so parse it
     const parameters = new URLSearchParams(body);
@@ -33,18 +39,11 @@ exports.handler = async event => {
       throw new Error('Payload must be a message');
     }
 
-    // if (data.channel.name !== 'javasnack') {
-    //   throw new Error('We can only process entries from #javasnack');
-    // }
-
-    // Parse the review text, remove all `*` characters
-    const review = parseReview(data.message.text.replace(new RegExp('[*]', 'g'), ''), data.user);
+    // Parse the Slack payload
+    const review = parseReview(data);
 
     // Generate the post template with the review object
     const post = generateTemplate(review);
-
-    // Generate the list item for homepage
-    const listItem = generateListItem(review.title);
 
     // Publish it to GitHub
     await createPost(review.title, post);
@@ -68,58 +67,76 @@ exports.handler = async event => {
  * @returns {String} - the review HTML
  */
 function generateTemplate(review) {
-  const { title, taste, presentation, vfm, tasteBody, presentationBody, vfmBody, username } = review;
+  const { title, username, scores, body } = review;
   const template = postTemplate;
   const date = new Date().toISOString();
 
   return template
     .replace('##TITLE##', title)
-    .replace('##TASTESCORE##', taste)
-    .replace('##PRESENTSCORE##', presentation)
-    .replace('##VFMSCORE##', vfm)
-    .replace('##TASTEBODY##', tasteBody)
-    .replace('##PRESENTBODY##', presentationBody)
-    .replace('##VFMBODY##', vfmBody)
     .replace('##AUTHOR##', username)
     .replace('##DATE##', date)
+    .replace('##TASTE##', scores.taste)
+    .replace('##PRESENT##', scores.presentation)
+    .replace('##VALUE##', scores.value)
+    .replace('##BODY##', body);
 }
 
 /**
- * Performs a somewhat hacky parse of the review text from Slack
- * and converts it into a data object with what we need for a post.
- * @param {String} review - the review text from Slack
- * @param {Object} user - the slack user object
+ * Performs a parse of the review from Slack and converts it into
+ * a data object with what we need for a post.
+ * @param {String} data - the payload from slack
  * @returns {Object} - the review object
  */
-function parseReview(review, user) {
-  // dodgily get title
-  const title = review.split('\n')[0].replace(new RegExp('[:]', 'g'), '');
+function parseReview(data) {
+  let review = data.message.text;
+  const username = data.user.name;
 
-  // dodgily pull scores out
+  // The title should always be the first line
+  const title = review.split('\n')[0].replace(REGEX_SANIT_TITLE, '');
+
   const scores = {};
+
   for (const score of [
-    { key: 'taste', searchString: 'taste: ' },
-    { key: 'presentation', searchString: 'presentation: ' },
-    { key: 'vfm', searchString: 'value for money: ' },
+    { key: 'taste', pattern: REGEX_TASTE_SCORE },
+    { key: 'presentation', pattern: REGEX_PRESENT_SCORE },
+    { key: 'value', pattern: REGEX_VALUE_SCORE },
   ]) {
-    const searchPos = review.search(new RegExp(score.searchString, 'i'));
+    const match = review.match(score.pattern);
+    const searchIndex = match.index + match[0].length;
+    const pad = 4;
 
-    if (searchPos > -1) {
-      const keyPosition = searchPos + score.searchString.length;
-
-      scores[score.key] = Number(review.substring(keyPosition, keyPosition + 2));
-    }
+    /**
+     * Substring the review string from after the colon here: `Taste:` plus `pad` characters
+     * (to account for possible space + decimal point) and then use the /\D/g expression to
+     * filter out any accidental non-digit characters, and then turn it into a number.
+     */
+    scores[score.key] = Number(review.substring(searchIndex, searchIndex + pad).replace(/\D/g, ''));
   }
 
-  // Get paragraphs
-  const paragraphs = review.split('\n');
-  // Find the heading, +1 the index to get the following paragraph
-  const tasteBody = paragraphs[paragraphs.findIndex(p => p === 'Taste') + 1];
-  const presentationBody = paragraphs[paragraphs.findIndex(p => p === 'Presentation') + 1];
-  const vfmBody = paragraphs[paragraphs.findIndex(p => p === 'Value for Money') + 1];
-  const username = user.name;
+  /**
+   * If there's a --begin-- signal, we get the content after the --begin-- signal.
+   * If there's no signal, we take a "best guess" and get the content from line 5
+   * onwards.
+   */
+  if (typeof review.split('--begin--')[1] !== 'undefined') {
+    review = review.split('--begin--')[1];
+  } else {
+    review = review
+      .split('\n')
+      .splice(5)
+      .join('\n');
+  }
 
-  return { title, ...scores, tasteBody, presentationBody, vfmBody, username };
+  /**
+   * Replace any *Slack Formatted* headings with h2 (##) tags
+   * whilst retaining any body bold text.
+   */
+  while (review.match(REGEX_HEADINGS)) {
+    const [_, char, innerText] = review.match(REGEX_HEADINGS);
+    review = review.replace(REGEX_HEADINGS, `## ${innerText}`);
+  }
+
+  return { title, scores, username, body: review };
 }
 
 /**
