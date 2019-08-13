@@ -178,7 +178,7 @@ main.wrapper {
 }
 
 .preview__link {
-  padding: 1.5rem 1rem;
+  padding: 1rem;
   text-decoration: none;
   display: flex;
   width: 100%;
@@ -186,14 +186,27 @@ main.wrapper {
   justify-content: space-between;
 }
 
+.preview__title {
+  margin-bottom: 1rem;
+}
+
 .preview__date {
-  color: #666;
+  color: #888;
   font-size: 1rem;
+}
+
+.preview__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .preview__score {
   font-family: var(--heading);
-  float: right;
+  line-height: 1;
+  position: relative;
+  top: -0.125em;
+  opacity: 0.6;
 }
 
 .preview__score sub {
