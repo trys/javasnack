@@ -26,9 +26,9 @@ exports.handler = async event => {
   }
 
   try {
-    // if (query.secret !== process.env.SECRET) {
-    //   throw new Error('Unauthorized');
-    // }
+    if (query.secret !== process.env.SECRET) {
+      throw new Error('Unauthorized');
+    }
 
     // The message comes in from Slack as a urlencoded string, so parse it
     const parameters = new URLSearchParams(body);
