@@ -17,7 +17,7 @@
 	</aside>
 
 	<main class="e-content wrapper">
-		<header class="review-header">Reviewed by {{ .Params.author }} on {{ .Date.Format "January 2, 2006" }}</header>
+		<header class="review-header">Reviewed by <a href="/author/{{ .Params.author }}">{{ .Params.author }}</a> on {{ .Date.Format "January 2, 2006" }}</header>
 		{{ .Content }}
 	</main>
 {{ end }}

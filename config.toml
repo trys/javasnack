@@ -2,3 +2,5 @@ baseurl = "/"
 languageCode = "en-us"
 languageLang = "en"
 title = "JavaSnack"
+[taxonomies]
+  author = "author"
