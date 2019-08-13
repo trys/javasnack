@@ -47,7 +47,7 @@ nav {
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  color: #222;
+  color: #444;
   background-color: #fafafa;
   font: 400 14px/1.625 -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
@@ -76,8 +76,10 @@ h1 {
   font-weight: 400;
 }
 
-h2 {
-  margin: 0 0 0.5rem;
+h2,
+h3 {
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
 }
 
 p {
@@ -137,9 +139,10 @@ main.wrapper {
   background: var(--brand);
   color: #fff;
   padding-top: 0.5rem;
+  margin: 0;
 }
 
-.review .wrapper {
+.review > * {
   display: flex;
   justify-content: space-between;
   text-align: center;
@@ -166,20 +169,58 @@ main.wrapper {
   grid-gap: 1.5rem;
 }
 
-.reviews > * {
+.preview {
   background: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: center;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.preview__link {
+  padding: 1rem;
+  text-decoration: none;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.preview__title {
+  margin-bottom: 1rem;
+}
+
+.preview__date {
+  color: #888;
+  font-size: 1rem;
+}
+
+.preview__meta {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.reviews a {
-  text-decoration: none;
-  display: block;
-  padding: 2rem 1rem;
-  text-align: center;
-  width: 100%:
+.preview__score {
+  font-family: var(--heading);
+  line-height: 1;
+  position: relative;
+  top: -0.125em;
+  opacity: 0.6;
+}
+
+.preview__score sub {
+  position: relative;
+  padding: 0.5em 0 0 0.5em;
+  top: 0.5em;
+}
+
+.preview__score sub:before {
+  content: '/';
+  position: absolute;
+  left: -0.125em;
+  top: 50%;
+  transform: translateY(-50%) translateY(-0.1em);
 }
 
 .reviews {
@@ -246,4 +287,8 @@ main.wrapper {
   margin-bottom: 2rem;
   font-size: 0.875rem;
   color: #666;
+}
+
+.review-header a {
+  color: inherit;
 }

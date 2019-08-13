@@ -1,6 +1,6 @@
 const { URLSearchParams } = require('url');
 const Octokit = require('@octokit/rest');
-const { postTemplate, listTemplate } = require('./snack-it-template');
+const { postTemplate } = require('./snack-it-template');
 
 const owner = 'trys';
 const repo = 'javasnack';
@@ -70,6 +70,7 @@ exports.handler = async event => {
 function generateTemplate(review) {
   const { title, taste, presentation, vfm, tasteBody, presentationBody, vfmBody, username } = review;
   const template = postTemplate;
+  const date = new Date().toISOString();
 
   return template
     .replace('##TITLE##', title)
@@ -79,17 +80,8 @@ function generateTemplate(review) {
     .replace('##TASTEBODY##', tasteBody)
     .replace('##PRESENTBODY##', presentationBody)
     .replace('##VFMBODY##', vfmBody)
-    .replace('##AUTHOR##', username);
-}
-
-/**
- * Generates a <li> item for the homepage
- * @param {String} title - the post title
- */
-function generateListItem(title) {
-  const template = listTemplate;
-
-  return template.replace('##SLUG##', slug(title)).replace('##TITLE##', title);
+    .replace('##AUTHOR##', username)
+    .replace('##DATE##', date)
 }
 
 /**
@@ -144,29 +136,15 @@ async function createPost(title, post) {
     ref: 'heads/master',
   });
 
-  const file = await github.repos.getContents({
-    owner,
-    repo,
-    path: '_imports/reviews.html',
-  });
-
-  const indexFile = generateListItem(title) + '\n' + Buffer.from(file.data.content, 'base64').toString();
-
   const tree = await github.git.createTree({
     owner,
     repo,
     tree: [
       {
-        path: `${slug(title)}/index.html`,
+        path: `/content/${slug(title)}.md`,
         mode: '100644',
         type: 'blob',
         content: post,
-      },
-      {
-        path: '_imports/reviews.html',
-        mode: '100644',
-        type: 'blob',
-        content: indexFile,
       },
     ],
     base_tree: branch.data.object.sha,

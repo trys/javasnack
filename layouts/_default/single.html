@@ -1,0 +1,23 @@
+{{ define "main" }}
+	<aside class="review">
+		<dl class="wrapper">
+			<div>
+				<dt>Taste:</dt>
+				<dd>{{ .Params.taste }}</dd>
+			</div>
+			<div>
+				<dt>Presentation:</dt>
+				<dd>{{ .Params.presentation }}</dd>
+			</div>
+			<div>
+				<dt>Value:</dt>
+				<dd>{{ .Params.value }}</dd>
+			</div>
+		</dl>
+	</aside>
+
+	<main class="e-content wrapper">
+		<header class="review-header">Reviewed by <a href="/author/{{ .Params.author }}">{{ .Params.author }}</a> on {{ .Date.Format "January 2, 2006" }}</header>
+		{{ .Content }}
+	</main>
+{{ end }}

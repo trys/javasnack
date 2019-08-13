@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="{{ $.Site.Language.Lang }}">
+  {{ partial "head" . }}
+	<body>
+		{{ partial "header" . }}
+		
+		<figure class="hero" style="background-image: url('{{ .Params.image | default `/assets/img/bg.jpg` }}')">
+			<div class="wrapper">
+				<h1>
+					{{ .Title }}
+				</h1>
+			</div>
+		</figure>
+
+		<main role="main" class="main">
+			{{ block "main" . }}
+
+			{{ end }}
+		</main>
+
+		{{ partial "footer" . }}
+	</body>
+</html>

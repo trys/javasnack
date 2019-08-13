@@ -1,0 +1,17 @@
+{{ define "main" }}
+  <main class="wrapper reviews">
+    {{ range .Pages }}
+      <article class="preview">
+        <a href="{{ .Permalink }}" class="preview__link">
+          <h3 class="preview__title">{{ .Title }}</h3>
+          <footer class="preview__meta">
+            <time class="preview__date">{{ .Date.Format "January 2, 2006" }}</time>
+            <output class="preview__score">
+              {{ math.Round (div (add (add (int .Params.taste) (int .Params.presentation)) (int .Params.value)) 3) }}<sub>10</sub>
+            </output>
+          </footer>
+        </a>
+      </article>
+    {{ end }}
+  </main>
+{{ end }}
