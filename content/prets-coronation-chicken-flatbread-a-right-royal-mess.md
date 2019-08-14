@@ -17,4 +17,4 @@ A picture tells 1000 words, but I only need one, abhorrent. Being the “Chefs s
 
 ## Value for Money
 
-This sandwich comes in at a wallet-busting £3.49 - and as is standard with Pret, once you've accessorised your lunch with a drink and perhaps a bag of crisps, this lunch will bankrupt you. Pret is a curse in the City of London, you cannot run nor hide without stumbling across a Pret on your dreary commute, surrounded by sad office workers queuing at the doors for their quick caffeine fix. Do they know they're sad? No, and that's the saddest part of all. Once you subject yourself to the Pret lunch routine, there is simply no escape. You'll see Pret in your dreams, your nightmares, and at every turn. Avoid at all costs.
+Admittedly, I didn’t take note of the price for all items, my total bill being £6.94, this consisted of a Regular Latte and Pret’s Coronation Chicken Flatbread, I cannot in good mind recommend this to anyone looking for a cheap lunch or on a tight budget. Understandably I imagine a large portion of the total cost for this goes into the copious amounts of filling they provide, but for once, please - lessen the filling!
