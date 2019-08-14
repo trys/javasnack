@@ -158,7 +158,7 @@ async function createPost(title, post) {
     repo,
     tree: [
       {
-        path: `/content/${slug(title)}.md`,
+        path: `content/${slug(title)}.md`,
         mode: '100644',
         type: 'blob',
         content: post,
